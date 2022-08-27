@@ -3,16 +3,14 @@ const { Countries, Activities } = require('../db.js');
 const { getApiToBd } = require('./controller_countries')
 const { Op } = require('sequelize');
 //*************************************************************************************//
-const getActivities = async (req, res) => {
+const getActivities = async (req, res, next) => {
      try {
           let activities = await Activities.findAll();
           res.status(200).json({
                msg: `Total Activities:`,
                info: activities,
           });
-     } catch (error) {
-          console.log(error);
-     }
+     } catch (error) {next(error) }
 };
 //*************************************************************************************//
 const addActivities = async (req, res, next) => {
@@ -43,9 +41,7 @@ const addActivities = async (req, res, next) => {
 
           res.status(200).json(sql);
 
-     } catch (error) {
-          res.status(500).send(error);
-     }
+     } catch (error) {next(error) } //res.status(500).send(error);
 }
 
 module.exports = { addActivities, getActivities };

@@ -4,7 +4,7 @@ const axios = require('axios');
 const API_URL_COUNTRIES = 'https://restcountries.com/v3/all';
 const { Op } = require('sequelize');
 //*************************************************************************************//
-const getCountryByName = async (req, res) => {
+const getCountryByName = async (req, res, next) => {
 	var name = req.query.name;
 	let countries = {};
 	try {
@@ -28,9 +28,7 @@ const getCountryByName = async (req, res) => {
 
 		Result = await Countries.findAll({ where: { Name: { [Op.iRegexp]: name } } });
 		return res.json({ msg: Result.length ? `Countries with name like %${name}%` : `Country not found, sorry`, info: Result });
-	} catch (error) {
-		console.log(error);
-	}
+	} catch (error) {next(error)}
 };
 
 const getCountryById = async (req, res, next) => {
@@ -50,9 +48,7 @@ const getCountryById = async (req, res, next) => {
 			msg: `List the Countries with Id = ${id}`,
 			info: sql,
 		});
-	} catch (error) {
-		console.log(error);
-	}
+	} catch (error) {next(error)}
 };
 
 const getApiToBd = async (req, res, next) => {
@@ -66,9 +62,7 @@ const getApiToBd = async (req, res, next) => {
 			);
 			console.log('datas add to BD countries');
 		}
-	} catch (error) {
-		console.log(error);
-	}
+	} catch (error) {next(error)}
 };
 
 const getApiCountries = async (req, res, next) => {
@@ -87,9 +81,7 @@ const getApiCountries = async (req, res, next) => {
 			};
 		});
 		return filterCountries;
-	} catch (error) {
-		console.log(error);
-	}
+	} catch (error) {next(error)}
 };
 
 module.exports = { getCountryByName, getCountryById, getApiToBd };
